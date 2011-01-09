@@ -14,7 +14,24 @@ ALLOWED_IPS = [
     '127.0.0.1',
 ]
 
+def instantiate(request):
+    if request.method != 'POST':
+        return http.HttpResponseBadRequest()
+    elif request.META['REMOTE_ADDR'] not in ALLOWED_IPS:
+        return http.HttpResponseForbidden()
+    
+    username = request.POST['username']
+    email = request.POST['email']
+    
+    u = User(username=username, email=email)
+    u.save()
+    
+    return http.HttpResponse('Created user #%d, %s <%s>' % (u.id(), username, email))
+
 def register(request):
+    # disable registration
+    return http.HttpResponseForbidden()
+    
     if request.method == 'POST':
         form = ClassicRegisterForm(request.POST)
         email_feeds_form = SimpleEmailSubscribeForm(request.POST)
@@ -47,19 +64,4 @@ def register(request):
         'form1': form,
         'email_feeds_form': email_feeds_form
         }, context_instance=RequestContext(request))
-
-
-def instantiate(request):
-    if request.method != 'POST':
-        return http.HttpResponseBadRequest()
-    elif request.META['REMOTE_ADDR'] not in ALLOWED_IPS:
-        return http.HttpResponseForbidden()
-    
-    username = request.POST['username']
-    email = request.POST['email']
-    
-    u = User(username=username, email=email)
-    u.save()
-    
-    return http.HttpResponse('Created user #%d, %s <%s>' % (u.id(), username, email))
         
