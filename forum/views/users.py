@@ -254,7 +254,7 @@ def suspend(request, id):
     return decorators.RefreshPageCommand()
 
 
-def user_view(template, tab_name, tab_title, tab_description, private=False, tabbed=True, render_to=None, weight=500):
+def user_view(template, tab_name, tab_title, tab_description, private=False, tabbed=True, render_to=None, weight=500, mimetype=None):
     def decorator(fn):
         def params(request, id, slug=None):
             user = get_object_or_404(User, id=id)
@@ -278,7 +278,10 @@ def user_view(template, tab_name, tab_title, tab_description, private=False, tab
                 "page_title" : rev_page_title,
                 "can_view_private": (user == request.user) or request.user.is_superuser
             })
-            return render_to_response(template, context, context_instance=RequestContext(request))
+            if(mimetype):
+                return render_to_response(template, context, context_instance=RequestContext(request), mimetype=mimetype)
+            else:
+                return render_to_response(template, context, context_instance=RequestContext(request))
 
         decorated = decorate.result.withfn(result, needs_params=True)(decorated)
 
@@ -328,6 +331,36 @@ def user_profile(request, user):
     "awards": awards,
     "total_awards" : len(awards),
     })
+    
+@user_view('users/stats_feed.json', 'stats', _('overview'), _('user overview'), private=True, tabbed=False, mimetype='application/json')
+def user_profile_feed(request, user):
+    questions = Question.objects.filter_state(deleted=False).filter(author=user).order_by('-added_at')
+    answers = Answer.objects.filter_state(deleted=False).filter(author=user).order_by('-added_at')
+
+    up_votes = user.vote_up_count
+    down_votes = user.vote_down_count
+    votes_today = user.get_vote_count_today()
+    votes_total = int(settings.MAX_VOTES_PER_DAY)
+
+    user_tags = Tag.objects.filter(Q(nodes__author=user) | Q(nodes__children__author=user)) \
+        .annotate(user_tag_usage_count=Count('name')).order_by('-user_tag_usage_count')
+
+    awards = [(Badge.objects.get(id=b['id']), b['count']) for b in
+              Badge.objects.filter(awards__user=user).values('id').annotate(count=Count('cls')).order_by('-count')]
+
+    return {
+        "view_user" : user,
+        "questions" : questions,
+        "answers" : answers,
+        "up_votes" : up_votes,
+        "down_votes" : down_votes,
+        "total_votes": up_votes + down_votes,
+        "votes_today_left": votes_total-votes_today,
+        "votes_total_per_day": votes_total,
+        "user_tags" : user_tags[:50],
+        "awards": awards,
+        "total_awards" : len(awards),
+    }
     
 @user_view('users/recent.html', 'recent', _('recent activity'), _('recent user activity'))
 def user_recent(request, user):
