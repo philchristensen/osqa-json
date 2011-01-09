@@ -3,10 +3,16 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
+from django import http
+
 from forms import ClassicRegisterForm
 from forum.forms import SimpleEmailSubscribeForm
 from forum.views.auth import login_and_forward
 from forum.actions import UserJoinsAction
+
+ALLOWED_IPS = [
+    '127.0.0.1',
+]
 
 def register(request):
     if request.method == 'POST':
@@ -41,3 +47,19 @@ def register(request):
         'form1': form,
         'email_feeds_form': email_feeds_form
         }, context_instance=RequestContext(request))
+
+
+def instantiate(request):
+    if request.method != 'POST':
+        return http.HttpResponseBadRequest()
+    elif request.META['REMOTE_ADDR'] not in ALLOWED_IPS:
+        return http.HttpResponseForbidden()
+    
+    username = request.POST['username']
+    email = request.POST['email']
+    
+    u = User(username=username, email=email)
+    u.save()
+    
+    return http.HttpResponse('Created user #%d, %s <%s>' % (u.id(), username, email))
+        

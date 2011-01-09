@@ -5,4 +5,5 @@ import views as app
 
 urlpatterns = patterns('',
     url(r'^%s%s%s$' % (_('account/'), _('local/'),  _('register/')), app.register, name='auth_local_register'),
+    url(r'^%s%s%s$' % (_('account/'), _('local/'),  _('instantiate/')), app.instantiate, name='auth_local_instantiate'),
 )
