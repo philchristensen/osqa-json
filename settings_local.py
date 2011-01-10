@@ -35,7 +35,7 @@ CACHE_BACKEND = 'file://%s' % os.path.join(os.path.dirname(__file__),'cache').re
 #CACHE_BACKEND = 'dummy://'
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
-APP_URL = 'http://oqsa.local/osqa' #used by email notif system and RSS
+APP_URL = 'http://megatron.bubblehouse.org/osqa' #used by email notif system and RSS
 
 #LOCALIZATIONS
 TIME_ZONE = 'America/New_York'
