@@ -30,7 +30,7 @@ def instantiate(request):
 
 def register(request):
     # disable registration
-    return http.HttpResponseForbidden()
+    # return http.HttpResponseForbidden()
     
     if request.method == 'POST':
         form = ClassicRegisterForm(request.POST)
