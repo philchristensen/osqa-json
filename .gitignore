@@ -1,0 +1,8 @@
+*.pyc
+*.egg-info
+.DS_Store
+access.log
+cache
+error.log
+log/django.osqa.log
+osqadb

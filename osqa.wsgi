@@ -1,12 +1,12 @@
 import os
 import sys
 sys.path.append('/Users/phil/Workspace')
-sys.path.append('/Users/phil/Workspace/osqa-json')
+sys.path.append('/Users/phil/Workspace/osqa_json')
 # The first part of this module name should be identical to the directory name
 # of the OSQA source.  For instance, if the full path to OSQA is
 # /home/osqa/osqa-server, then the DJANGO_SETTINGS_MODULE should have a value
 # of 'osqa-server.settings'.
-os.environ['DJANGO_SETTINGS_MODULE'] = 'osqa.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'osqa_json.settings'
 os.environ['PYTHON_EGG_CACHE'] = '/tmp'
 
 import django.core.handlers.wsgi
