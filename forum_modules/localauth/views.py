@@ -12,25 +12,29 @@ from forum.actions import UserJoinsAction
 
 ALLOWED_IPS = [
     '127.0.0.1',
+    '192.168.1.99',
 ]
 
 def instantiate(request):
-    if request.method != 'POST':
+    if request.META['REMOTE_ADDR'] not in ALLOWED_IPS:
+        return http.HttpResponseForbidden('Invalid REMOTE_ADDR')
+    elif request.method != 'GET':
         return http.HttpResponseBadRequest()
-    elif request.META['REMOTE_ADDR'] not in ALLOWED_IPS:
-        return http.HttpResponseForbidden()
     
-    username = request.POST['username']
-    email = request.POST['email']
+    try:
+        username = request.GET['username']
+        email = request.GET['email']
+    except http.MultiValueDictKeyError:
+        return http.HttpResponseBadRequest()
     
     u = User(username=username, email=email)
     u.save()
     
-    return http.HttpResponse('Created user #%d, %s <%s>' % (u.id(), username, email))
+    return http.HttpResponse('Created user #%d, %s <%s>' % (u.id, username, email))
 
 def register(request):
     # disable registration
-    # return http.HttpResponseForbidden()
+    return http.HttpResponseForbidden()
     
     if request.method == 'POST':
         form = ClassicRegisterForm(request.POST)
