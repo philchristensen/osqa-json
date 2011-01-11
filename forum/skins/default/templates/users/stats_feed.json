@@ -14,7 +14,7 @@
             "accepted_count"    : {{ question.accepted_count }},
             "favorite_count"    : {{ question.favorite_count }},
             "view_count"        : {{ question.view_count }},
-            "closed"            : {{ question.closed|lower }},
+            "closed"            : {{ question.closed|lower }}
         }{% if not forloop.last %},{% endif %}{% endfor %}
     ],
     "answers"               : [{% for answer in answers %}
@@ -22,7 +22,7 @@
             "answer"            : "{{ answer.body|escapejs }}",
             "added_at"          : "{{ answer.added_at|escapejs }}",
             "user"              : "{{ answer.author.username|escapejs }}",
-            "accepted"          : {{ answer.accepted|lower }},
+            "accepted"          : {{ answer.accepted|lower }}
         }{% if not forloop.last %},{% endif %}{% endfor %}
     ]
 }
