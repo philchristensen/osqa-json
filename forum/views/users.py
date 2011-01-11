@@ -332,7 +332,7 @@ def user_profile(request, user):
     "total_awards" : len(awards),
     })
     
-@user_view('users/stats_feed.json', 'stats', _('overview'), _('user overview'), private=True, tabbed=False, mimetype='text/plain')
+@user_view('users/stats_feed.json', 'stats', _('overview'), _('user overview'), tabbed=False, mimetype='text/plain')
 def user_profile_feed(request, user):
     questions = Question.objects.filter_state(deleted=False).filter(author=user).order_by('-added_at')
     answers = Answer.objects.filter_state(deleted=False).filter(author=user).order_by('-added_at')
