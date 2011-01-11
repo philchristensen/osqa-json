@@ -1,28 +1,28 @@
 {
-    'user'                  : "{{ user.username|escapejs }}",
-    'up_votes'              : {{ up_votes }},
-    'down_votes'            : {{ down_votes }},
-    'total_votes'           : {{ total_votes }},
-    'votes_today_left'      : {{ votes_today_left }},
-    'votes_total_per_day'   : {{ votes_total_per_day }},
-    'total_awards'          : {{ total_awards }},
-    'questions'             : [{% for question in questions %}
+    "user"                  : "{{ view_user.username|escapejs }}",
+    "up_votes"              : {{ up_votes }},
+    "down_votes"            : {{ down_votes }},
+    "total_votes"           : {{ total_votes }},
+    "votes_today_left"      : {{ votes_today_left }},
+    "votes_total_per_day"   : {{ votes_total_per_day }},
+    "total_awards"          : {{ total_awards }},
+    "questions"             : [{% for question in questions %}
         {
-            'question'          : "{{ question.title|escapejs }}",
-            'added_at'          : "{{ question.added_at|escapejs }}",
-            'answer_count'      : {{ question.answer_count }},
-            'accepted_count'    : {{ question.accepted_count }},
-            'favorite_count'    : {{ question.favorite_count }},
-            'view_count'        : {{ question.view_count }},
-            'closed'            : {{ question.closed|lower }},
+            "question"          : "{{ question.title|escapejs }}",
+            "added_at"          : "{{ question.added_at|escapejs }}",
+            "answer_count"      : {{ question.answer_count }},
+            "accepted_count"    : {{ question.accepted_count }},
+            "favorite_count"    : {{ question.favorite_count }},
+            "view_count"        : {{ question.view_count }},
+            "closed"            : {{ question.closed|lower }},
         }{% if not forloop.last %},{% endif %}{% endfor %}
     ],
-    'answers'               : [{% for answer in answers %}
+    "answers"               : [{% for answer in answers %}
         {
-            'answer'            : "{{ answer.body|escapejs }}",
-            'added_at'          : "{{ answer.added_at|escapejs }}",
-            'user'              : "{{ answer.author.username|escapejs }}",
-            'accepted'          : {{ answer.accepted|lower }},
+            "answer"            : "{{ answer.body|escapejs }}",
+            "added_at"          : "{{ answer.added_at|escapejs }}",
+            "user"              : "{{ answer.author.username|escapejs }}",
+            "accepted"          : {{ answer.accepted|lower }},
         }{% if not forloop.last %},{% endif %}{% endfor %}
-    ],
+    ]
 }
