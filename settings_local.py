@@ -57,4 +57,4 @@ LANGUAGE_CODE = 'en'
 DJANGO_VERSION = 1.1
 OSQA_DEFAULT_SKIN = 'default'
 
-DISABLED_MODULES = ['books', 'recaptcha', 'project_badges']
+DISABLED_MODULES = ['books', 'recaptcha', 'project_badges', 'facebookauth', 'oauthauth', 'openidauth']
