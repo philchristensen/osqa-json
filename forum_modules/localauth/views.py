@@ -16,9 +16,9 @@ ALLOWED_IPS = [
 ]
 
 def instantiate(request):
-    if request.META['REMOTE_ADDR'] not in ALLOWED_IPS:
-        return http.HttpResponseForbidden('Invalid REMOTE_ADDR')
-    elif request.method != 'GET':
+    # if request.META['REMOTE_ADDR'] not in ALLOWED_IPS:
+    #     return http.HttpResponseForbidden('Invalid REMOTE_ADDR')
+    if request.method != 'GET':
         return http.HttpResponseBadRequest('Invalid request method')
     
     try:
