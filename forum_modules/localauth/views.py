@@ -19,13 +19,16 @@ def instantiate(request):
     if request.META['REMOTE_ADDR'] not in ALLOWED_IPS:
         return http.HttpResponseForbidden('Invalid REMOTE_ADDR')
     elif request.method != 'GET':
-        return http.HttpResponseBadRequest()
+        return http.HttpResponseBadRequest('Invalid request method')
     
     try:
         username = request.GET['username']
         email = request.GET['email']
-    except http.MultiValueDictKeyError:
-        return http.HttpResponseBadRequest()
+    except http.MultiValueDictKeyError, e:
+        return http.HttpResponseBadRequest(str(e))
+    
+    if(User.objects.filter(username=username)):
+        return http.HttpResponseBadRequest('Username already in use')
     
     u = User(username=username, email=email)
     u.save()
