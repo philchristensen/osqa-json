@@ -30,8 +30,13 @@ def authenticate(request):
         return http.HttpResponseForbidden('User with provided auth token not found')
     
     u = u[0]
+    u.auth_token = ''
+    u.save()
     u.backend = 'django.contrib.auth.backends.ModelBackend'
     login(request, u)
+    
+    if 'url' in request.GET:
+        return http.HttpResponseRedirect(request.GET['url'])
     
     return http.HttpResponse('Logged-in user #%d, %s <%s>' % (u.id, u.username, u.email))
 
