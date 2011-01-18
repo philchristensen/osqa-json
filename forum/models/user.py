@@ -129,6 +129,8 @@ class User(BaseModel, DjangoUser):
     date_of_birth = models.DateField(null=True, blank=True)
     about = models.TextField(blank=True)
 
+    auth_token = models.CharField(max_length=32, blank=True)
+
     subscriptions = models.ManyToManyField('Node', related_name='subscribers', through='QuestionSubscription')
 
     vote_up_count = DenormalizedField("actions", canceled=False, action_type="voteup")

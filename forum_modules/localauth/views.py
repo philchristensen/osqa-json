@@ -1,8 +1,10 @@
+import time
+
 from forum.models import User
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
-
+from django.contrib.auth import login
 from django import http
 
 from forms import ClassicRegisterForm
@@ -14,6 +16,39 @@ ALLOWED_IPS = [
     '127.0.0.1',
     '192.168.1.99',
 ]
+
+KODINGEN_COOKIE_NAME = 'kodingen'
+
+def authenticate(request):
+    if KODINGEN_COOKIE_NAME not in request.COOKIES:
+        return http.HttpResponseBadRequest('Kodingen cookie not found')
+    
+    auth_token = request.COOKIES[KODINGEN_COOKIE_NAME]
+    u = User.objects.filter(auth_token=auth_token)
+    
+    if not(u):
+        return http.HttpResponseForbidden('User with provided auth token not found')
+    
+    u = u[0]
+    u.backend = 'django.contrib.auth.backends.ModelBackend'
+    login(request, u)
+    
+    return http.HttpResponse('Logged-in user #%d, %s <%s>' % (u.id, u.username, u.email))
+
+def authenticate_test(request):
+    kodingen_cookie = '###########%s###########' % time.time()
+    
+    u = User.objects.filter(username=request.GET['username'])
+    if not(u):
+        return http.HttpResponseBadRequest('Invalid user specified')
+    
+    u = u[0]
+    u.auth_token = kodingen_cookie
+    u.save()
+    
+    r = http.HttpResponse('Setup test kodingen cookie for #%d, %s <%s>' % (u.id, u.username, u.email))
+    r.set_cookie(KODINGEN_COOKIE_NAME, kodingen_cookie)
+    return r
 
 def instantiate(request):
     # if request.META['REMOTE_ADDR'] not in ALLOWED_IPS:
