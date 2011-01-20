@@ -41,37 +41,57 @@ Clone and configure osqa-json repo:
 
 Enable VHOSTs on Apache:
 
+```bash
     echo >> /etc/httpd/conf/httpd.conf
     echo 'NameVirtualHost *:80' >> /etc/httpd/conf/httpd.conf
     echo 'Include /etc/httpd/conf/vhosts/*.conf' >> /etc/httpd/conf/httpd.conf
+```
 
 Create apache VHOST directory, add symlink for apache config:
 
+```bash
     mkdir /etc/httpd/conf/vhosts
     ln -s /opt/osqa_json/apache-vhost.conf /etc/httpd/conf/vhosts/osqa.ct.srv.kodingen.com.conf
+```
 
 Start up MySQL
 
+```bash
     /etc/init.d/mysqld start
+```
 
 Secure MySQL installation:
 
+```bash
     mysql_secure_installation
+```
 
 Connect to mysql as root, execute:
 
+```sql
     CREATE DATABASE osqa;
     USE osqa;
     GRANT ALL ON osqa.* TO osqa@localhost IDENTIFIED BY 'liejujryn';
     FLUSH PRIVILEGES;
+```
 
 Install OSQA database (answer 'no' when asked to create a superuser):
 
+```bash
     python manage.py syncdb
+```
+
+Connect to mysql as root again, execute:
+
+```sql
+    UPDATE auth_user SET is_superuser=1, is_staff=1 WHERE username = 'admin';
+```
 
 Start up Apache:
 
+```bash
     /etc/init.d/httpd start
+```
 
 Visit home page to test site:
 
@@ -85,6 +105,6 @@ Give yourself a test Kodingen cookie:
 
     http://osqa.ct.srv.kodingen.com/osqa/account/local/authenticate-test/?username=admin
 
-Login to OSQA
+Login to OSQA:
 
     http://osqa.ct.srv.kodingen.com/osqa/account/local/authenticate/?url=/osqa
