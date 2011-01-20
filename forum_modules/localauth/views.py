@@ -3,6 +3,8 @@ import time
 from forum.models import User
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+
+from django.utils import datastructures
 from django.utils.translation import ugettext as _
 from django.contrib.auth import login
 from django import http
@@ -41,7 +43,8 @@ def authenticate(request):
     return http.HttpResponse('Logged-in user #%d, %s <%s>' % (u.id, u.username, u.email))
 
 def authenticate_test(request):
-    kodingen_cookie = '###########%s###########' % time.time()
+    import md5
+    kodingen_cookie = md5.new(time.time()).hexdigest()
     
     u = User.objects.filter(username=request.GET['username'])
     if not(u):
@@ -64,7 +67,7 @@ def instantiate(request):
     try:
         username = request.GET['username']
         email = request.GET['email']
-    except http.MultiValueDictKeyError, e:
+    except datastructures.MultiValueDictKeyError, e:
         return http.HttpResponseBadRequest(str(e))
     
     if(User.objects.filter(username=username)):
