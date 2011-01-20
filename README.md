@@ -49,3 +49,42 @@ Create apache VHOST directory, add symlink for apache config:
 
     mkdir /etc/httpd/conf/vhosts
     ln -s /opt/osqa_json/apache-vhost.conf /etc/httpd/conf/vhosts/osqa.ct.srv.kodingen.com.conf
+
+Start up MySQL
+
+    /etc/init.d/mysqld start
+
+Secure MySQL installation:
+
+    mysql_secure_installation
+
+Connect to mysql as root, execute:
+
+    CREATE DATABASE osqa;
+    USE osqa;
+    GRANT ALL ON osqa.* TO osqa@localhost IDENTIFIED BY 'liejujryn';
+    FLUSH PRIVILEGES;
+
+Install OSQA database (answer 'no' when asked to create a superuser):
+
+    python manage.py syncdb
+
+Start up Apache:
+
+    /etc/init.d/httpd start
+
+Visit home page to test site:
+
+    http://osqa.ct.srv.kodingen.com/osqa/
+
+Create a user account:
+
+    http://osqa.ct.srv.kodingen.com/osqa/account/local/instantiate/?username=admin&email=admin@example.com
+
+Give yourself a test Kodingen cookie:
+
+    http://osqa.ct.srv.kodingen.com/osqa/account/local/authenticate-test/?username=admin
+
+Login to OSQA
+
+    http://osqa.ct.srv.kodingen.com/osqa/account/local/authenticate/?url=/osqa

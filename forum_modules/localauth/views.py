@@ -43,8 +43,8 @@ def authenticate(request):
     return http.HttpResponse('Logged-in user #%d, %s <%s>' % (u.id, u.username, u.email))
 
 def authenticate_test(request):
-    import md5
-    kodingen_cookie = md5.new(str(time.time())).hexdigest()
+    import hashlib
+    kodingen_cookie = hashlib.md5(str(time.time())).hexdigest()
     
     u = User.objects.filter(username=request.GET['username'])
     if not(u):
