@@ -24,12 +24,12 @@ TEMPLATE_DEBUG = DEBUG
 INTERNAL_IPS = ('127.0.0.1',)
 
 
-DATABASE_NAME = '/Users/phil/Workspace/osqa_json/osqadb/osqa.db'             # Or path to database file if using sqlite3.
-DATABASE_USER = ''               # Not used with sqlite3.
-DATABASE_PASSWORD = ''               # Not used with sqlite3.
-DATABASE_ENGINE = 'sqlite3'  #mysql, etc
-DATABASE_HOST = ''
-DATABASE_PORT = ''
+DATABASE_NAME = 'osqa'             # Or path to database file if using sqlite3.
+DATABASE_USER = 'osqa'               # Not used with sqlite3.
+DATABASE_PASSWORD = 'liejujryn'               # Not used with sqlite3.
+DATABASE_ENGINE = 'mysql'  #mysql, etc
+DATABASE_HOST = 'localhost'
+DATABASE_PORT = '3306'
 
 CACHE_BACKEND = 'file://%s' % os.path.join(os.path.dirname(__file__),'cache').replace('\\','/')
 #CACHE_BACKEND = 'dummy://'

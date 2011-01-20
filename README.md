@@ -12,10 +12,32 @@ Install required Python modules:
 
     easy_install-2.6 django MySQL-python html5lib markdown
 
-Clone osqa-json repo:
+Download and compile mod_wsgi:
+
+    cd /opt
+    wget http://modwsgi.googlecode.com/files/mod_wsgi-3.3.tar.gz
+    tar zxvf mod_wsgi-3.3.tar.gz
+    cd mod_wsgi-3.3
+    ./configure --with-python=/usr/bin/python26
+    make
+    make install
+
+Activate mod_wsgi Apache module:
+
+    echo 'LoadModule wsgi_module modules/mod_wsgi.so' > /etc/httpd/conf.d/mod_wsgi.conf
+    chown -R apache /etc/httpd/logs
+    chmod -R 775 /etc/httpd/logs
+
+Clone and configure osqa-json repo:
 
     cd /opt
     git clone git://github.com/philchristensen/osqa-json.git osqa_json
+    cd osqa_json
+    chgrp apache log
+    chmod 775 log
+    mkdir cache
+    chgrp apache cache
+    chmod 775 cache
 
 Enable VHOSTs on Apache:
 
@@ -23,6 +45,7 @@ Enable VHOSTs on Apache:
     echo 'NameVirtualHost *:80' >> /etc/httpd/conf/httpd.conf
     echo 'Include /etc/httpd/conf/vhosts/*.conf' >> /etc/httpd/conf/httpd.conf
 
-Create apache VHOST directory:
+Create apache VHOST directory, add symlink for apache config:
 
     mkdir /etc/httpd/conf/vhosts
+    ln -s /opt/osqa_json/apache-vhost.conf /etc/httpd/conf/vhosts/osqa.ct.srv.kodingen.com.conf

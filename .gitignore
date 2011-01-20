@@ -7,3 +7,5 @@ error.log
 log/django.osqa.log
 osqadb
 favicon.ico
+osqa.wsgi
+
