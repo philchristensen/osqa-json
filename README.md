@@ -2,25 +2,25 @@
 
 Install the EPEL repo for yum support:
 
-```sh
+```
     rpm -Uvh http://download.fedora.redhat.com/pub/epel/5/i386/epel-release-5-4.noarch.rpm
 ```
 
 Install the essential dependencies:
 
-```sh
+```
     yum install mysql-server mysql-devel httpd httpd-devel python26 python26-devel python26-distribute
 ```
 
 Install required Python modules:
 
-```sh
+```
     easy_install-2.6 django MySQL-python html5lib markdown
 ```
 
 Download and compile mod_wsgi:
 
-```sh
+```
     cd /opt
     wget http://modwsgi.googlecode.com/files/mod_wsgi-3.3.tar.gz
     tar zxvf mod_wsgi-3.3.tar.gz
@@ -32,7 +32,7 @@ Download and compile mod_wsgi:
 
 Activate mod_wsgi Apache module:
 
-```sh
+```
     echo 'LoadModule wsgi_module modules/mod_wsgi.so' > /etc/httpd/conf.d/mod_wsgi.conf
     chown -R apache /etc/httpd/logs
     chmod -R 775 /etc/httpd/logs
@@ -40,7 +40,7 @@ Activate mod_wsgi Apache module:
 
 Clone and configure osqa-json repo:
 
-```sh
+```
     cd /opt
     git clone git://github.com/philchristensen/osqa-json.git osqa_json
     cd osqa_json
@@ -53,7 +53,7 @@ Clone and configure osqa-json repo:
 
 Enable VHOSTs on Apache:
 
-```sh
+```
     echo >> /etc/httpd/conf/httpd.conf
     echo 'NameVirtualHost *:80' >> /etc/httpd/conf/httpd.conf
     echo 'Include /etc/httpd/conf/vhosts/*.conf' >> /etc/httpd/conf/httpd.conf
@@ -61,20 +61,20 @@ Enable VHOSTs on Apache:
 
 Create apache VHOST directory, add symlink for apache config:
 
-```sh
+```
     mkdir /etc/httpd/conf/vhosts
     ln -s /opt/osqa_json/apache-vhost.conf /etc/httpd/conf/vhosts/osqa.ct.srv.kodingen.com.conf
 ```
 
 Start up MySQL
 
-```sh
+```
     /etc/init.d/mysqld start
 ```
 
 Secure MySQL installation:
 
-```sh
+```
     mysql_secure_installation
 ```
 
@@ -89,7 +89,7 @@ Connect to mysql as root, execute:
 
 Install OSQA database (answer 'no' when asked to create a superuser):
 
-```sh
+```
     python manage.py syncdb
 ```
 
@@ -101,7 +101,7 @@ Connect to mysql as root again, execute:
 
 Start up Apache:
 
-```sh
+```
     /etc/init.d/httpd start
 ```
 
