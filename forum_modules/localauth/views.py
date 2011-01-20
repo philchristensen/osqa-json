@@ -44,7 +44,7 @@ def authenticate(request):
 
 def authenticate_test(request):
     import md5
-    kodingen_cookie = md5.new(time.time()).hexdigest()
+    kodingen_cookie = md5.new(str(time.time())).hexdigest()
     
     u = User.objects.filter(username=request.GET['username'])
     if not(u):
